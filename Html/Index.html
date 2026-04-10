@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body class="text-white min-h-screen overflow-x-hidden">
+    <div class="bubbles">
+
+        <div class="bubble w-16 h-16 left-[10%]" style="animation-duration: 12s;"></div>
+
+        <div class="bubble w-24 h-24 left-[25%]" style="animation-duration: 18s;"></div>
+
+        <div class="bubble w-12 h-12 left-[40%]" style="animation-duration: 10s;"></div>
+
+        <div class="bubble w-20 h-20 left-[60%]" style="animation-duration: 15s;"></div>
+
+        <div class="bubble w-14 h-14 left-[80%]" style="animation-duration: 13s;"></div>
+
+    </div>
+
+
+    <header>
+        <div class="flex justify-between gap-10 ml-5 mr-10">
+            <h2 class="text-3xl sticky font-bold p-2 mt-2 hover:text-pink-500 transition duration-300 cursor-pointer">
+                Chat-Sphere</h2>
+            <nav class="flex gap-15 mr-10 mt-2 justify-center border-2 p-4 border-gray-300  rounded-4xl">
+                <a href="#" class="hover:text-pink-500 transition duration-300">Home</a>
+                <a href="#" class="hover:text-pink-500 transition duration-300">About</a>
+                <a href="#" class="hover:text-pink-500 transition duration-300">Support</a>
+                <a href="#" class="hover:text-pink-500 transition duration-300">Contact</a>
+            </nav>
+        </div>
+    </header>
+    <div class="flex justify-between">
+        <div class="left flex flex-col justify-center m-10 gap-5">
+            <h1 class="text-4xl font-bold font-serif ml-6 mt-30">Join the Our Community.</h1>
+            <p class="text-2xl font-serif w-150 ml-5">Chat-Sphere is a free Online Chatroom & Community, where you can
+                chat
+                with your friends.</p>
+        </div>
+        <div class="right w-150 h-150"><img src="../Images/Sukuna1.png" id="sukuna" alt=""></div>
+    </div>
+
+    <section class="reveal flex w-260 h-125 mb-15 mt-40 rounded-[160px] ">
+        <div class="flex items-center justify-between gap-30">
+            <div class="ml-10"><img src="../Images/Anime chat interface in Output Messenger.png" class="backdrop-blur-sm bg-white/30 p-6 rounded-4xl cursor-pointer hover:scale-110 transition-all
+                    duration-300 delay-100 ease-in-out" alt="">
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold font-serif">Make your Chats Rooms Private</h1>
+                <p class="text-xl font-serif w-130">The Our Chat-Sphere Provide you a free and interactive,
+                    Chat-Platform to Connect with your friends.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal flex w-260 h-125 ml-85 mb-20 mt-10 rounded-[160px]">
+        <div class="flex items-center justify-center gap-30">
+            <div class="ml-15"><img src="../Images/Fire Force characters texting on smartphone.png" class="rounded-4xl cursor-pointer hover:scale-110 transition-all
+                    duration-300 delay-100 ease-in-out" alt=""></div>
+            <div class="mr-10">
+                <h1 class="text-2xl font-bold font-serif">See Who's Around are Online To Chill Out</h1>
+                <p class="text-xl font-serif w-130">See Who's around, chats and hang out with you and your friends. Also
+                    make new friends to Connect with
+                    each other's.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal flex max-w-6xl h-auto my-10 rounded-[100px] p-10">
+
+        <div class="flex flex-col justify-center gap-10">
+
+            <h1 class="text-3xl font-bold font-serif max-w-4xl ml-15">
+                No need to go anywhere else to share your stories;
+                come to our ChatSphere and make new friends!
+            </h1>
+
+            <div class="ml-60">
+                <img src="../Images/The lone soldier at twilight.png" class="w-full max-w-xl ml-[-180px] h-auto rounded-4xl"
+                    alt="The lone soldier at twilight">
+            </div>
+
+            <button class="border px-6 py-2 w-fit rounded-3xl cursor-pointer 
+                       hover:bg-red-500 hover:text-white 
+                       transition-all duration-300 ease-in-out">
+                Chat-Sphere
+            </button>
+
+        </div>
+
+    </section>
+
+    <footer class="reveal flex flex-col m-2 border-t-1 ">
+        <div class="flex m-10 border-1 w-25 rounded-3xl justify-center cursor-pointer">Logo</div>
+        <div class="m-5">
+            <h2 class="text-2xl font-bold font-serif w-270 ">A free and easy-to-use chat platform designed for seamless
+                communication. Connect with others through
+                group chat rooms or enjoy private one-on-one messaging anytime, anywhere. Build communities, share
+                ideas, and stay connected—all in one place.
+            </h2>
+            <div class="flex gap-5 mt-15 ">
+                <div class="relative group">
+                    <i class="fab fa-whatsapp text-green-500 cursor-pointer fa-2x"></i>
+                    <span class="absolute -top-12 left-1/2 -translate-x-1/2 
+                     bg-green-500 text-white text-sm px-2 py-1 
+                     rounded-2xl opacity-0 group-hover:opacity-100 
+                     transition">
+                        WhatsApp
+                        <span class="absolute top-full left-1/2 -translate-x-1/2 
+                 border-4 border-transparent border-t-green-500"></span>
+                    </span>
+                </div>
+                <div class="relative group">
+                    <i class="fab fa-instagram text-pink-500 cursor-pointer fa-2x"></i>
+                    <span class="absolute -top-12 left-1/2 -translate-x-1/2 
+                     bg-pink-500 text-white text-sm px-2 py-1 
+                     rounded-2xl opacity-0 group-hover:opacity-100 
+                     transition">
+                        Instagram
+                        <span class="absolute top-full left-1/2 -translate-x-1/2 
+                 border-4 border-transparent border-t-pink-500"></span>
+                    </span>
+                </div>
+                <div class="relative group">
+                    <i class="fab fa-x fa-2x cursor-pointer"></i>
+                    <span class="absolute -top-12 left-1/2 -translate-x-1/2 
+                     bg-black text-white text-sm px-2 py-1 
+                     rounded opacity-0 group-hover:opacity-100 
+                     transition">
+                        X
+                        <span class="absolute top-full left-1/2 -translate-x-1/2 
+                 border-4 border-transparent border-t-black"></span>
+                    </span>
+                </div>
+                <div class="relative group">
+                    <i class="fab fa-linkedin text-blue-800 fa-2x cursor-pointer"></i>
+                    <span class="absolute -top-12 left-1/2 -translate-x-1/2 
+                     bg-blue-800 text-white text-sm px-2 py-1 
+                     rounded-2xl opacity-0 group-hover:opacity-100 
+                     transition">
+                        Linkedin
+                        <span class="absolute top-full left-1/2 -translate-x-1/2 
+                 border-4 border-transparent border-t-blue-800"></span>
+                    </span>
+                </div>
+                <div class="relative group">
+                    <i class="fab fa-telegram text-blue-400 fa-2x cursor-pointer"></i>
+                    <span class="absolute -top-12 left-1/2 -translate-x-1/2 
+                     bg-blue-400 text-white text-sm px-2 py-1 
+                     rounded-2xl opacity-0 group-hover:opacity-100 
+                     transition">
+                        Telegram
+                        <span class="absolute top-full left-1/2 -translate-x-1/2 
+                 border-4 border-transparent border-t-blue-400"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="flex mb-2 mt-5 border-1 w-25 rounded-3xl justify-center ml-290 cursor-pointer">Logo</div>
+    </footer>
+
+</body>
+<script>
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ===============================
+       1. Sukuna enters after 3 seconds
+    ================================= */
+
+    gsap.from("#sukuna", {
+        x: 500,
+        opacity: 0,
+        duration: 2.5,
+        delay: 1,
+        ease: "power3.out"
+    });
+
+</script>
+
+</html>
