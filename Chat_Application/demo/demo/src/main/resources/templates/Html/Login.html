@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-blue-100 via-white to-green-100 min-h-screen flex justify-center items-center">
+
+    <!-- Login Card -->
+    <div class="bg-white/80 backdrop-blur-lg shadow-2xl border border-gray-200 
+                h-[450px] w-[380px] rounded-3xl flex flex-col 
+                justify-center items-center p-8 ">
+
+        <!-- Icon -->
+        <div class="flex flex-col items-center">
+            <img src="../../static/Images/Blue shield padlock icon on gray background.png"
+                class="w-62 h-32 drop-shadow-lg"
+                alt="Security">
+
+            <h1 class="mt-4 text-2xl font-bold text-gray-800">
+                Enter Your Phone Number
+            </h1>
+
+            <p class="text-gray-500 mt-2 text-center">
+                Please enter your mobile number to receive an OTP for verification
+            </p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="flex items-center mt-8 w-full">
+
+            <select class="h-12 px-3 rounded-l-xl border border-gray-300 
+                           focus:outline-none 
+                           bg-gray-50">
+
+                <option value="+91">🇮🇳 (+91)</option>
+                <option value="+1">🇺🇸 (+1)</option>
+                <option value="+44">UK (+44)</option>
+                <option value="+61">🇦🇺 (+61)</option>
+                <option value="+971">🇦🇪 (+971)</option>
+                <option value="+880">🇧🇩 (+880)</option>
+                <option value="+86">🇨🇳 (+86)</option>
+                <option value="+81">🇯🇵 (+81)</option>
+                <option value="+82">🇰🇷 (+82)</option>
+            </select>
+
+            <input 
+                type="text"
+                placeholder="Enter mobile number"
+                class="flex-1 h-12 px-4 rounded-r-xl border border-gray-300 
+                       focus:outline-none"
+            >
+
+        </div>
+
+        <!-- Button -->
+        <button class="mt-10 w-full bg-gradient-to-r from-green-500 to-emerald-600 
+                       text-white font-semibold py-3 rounded-xl shadow-lg
+                       hover:from-green-600 hover:to-emerald-700
+                       active:scale-95 transition duration-200">
+
+            Continue
+
+        </button>
+
+    </div>
+    
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+com\chatapp\demo\ChatServer.class
+com\chatapp\demo\PrivateMessageServer.class
+com\chatapp\demo\DemoApplication.class
+com\chatapp\demo\WebSocketConfig.class

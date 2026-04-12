@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messaging UI - Dark & Light Theme</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+        <link rel="stylesheet" href="../../static/Css/style1.css">
+    
+</head>
+
+<body class="overflow-hidden">
+    
+
+<div class="flex h-screen w-full">
+
+    <!-- SIDEBAR -->
+    <div class="w-16 md:w-20 flex flex-col justify-between items-center py-6 text-white bg-black neon">
+
+        <div class="flex flex-col items-center gap-8">
+
+            <div class="text-2xl">💬</div>
+
+            <i class="fa fa-user text-lg cursor-pointer hover-glow"></i>
+            <i class="fa fa-message text-lg cursor-pointer hover-glow"></i>
+            <i class="fa fa-bell text-lg cursor-pointer hover-glow"></i>
+
+        </div>
+
+        <div class="flex flex-col gap-6">
+
+            <button onclick="toggleTheme()">
+                <i class="fa fa-circle-half-stroke text-lg hover-glow"></i>
+            </button>
+
+            <i class="fa fa-gear text-lg hover-glow"></i>
+
+        </div>
+
+    </div>
+
+    <!-- MESSAGE LIST -->
+    <div class="hidden md:flex md:w-72 flex-col border-r p-4 gap-2 overflow-y-auto no-scrollbar">
+
+        <h2 class="text-xl font-semibold mb-2">Messages</h2>
+
+        <!-- 9 USERS -->
+        
+        <!-- user template repeated -->
+        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 cursor-pointer">
+            <img src="https://i.pravatar.cc/40" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col flex-1">
+                <span class="font-semibold">Vansh</span>
+                <span class="text-sm text-gray-400">Hey, are you coming?</span>
+            </div>
+            <span class="text-xs text-gray-400">2m</span>
+        </div>
+
+        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 cursor-pointer">
+            <img src="https://i.pravatar.cc/41" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col flex-1">
+                <span class="font-semibold">Aman</span>
+                <span class="text-sm text-gray-400">Meeting today</span>
+            </div>
+            <span class="text-xs text-gray-400">5m</span>
+        </div>
+
+        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 cursor-pointer">
+            <img src="https://i.pravatar.cc/42" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col flex-1">
+                <span class="font-semibold">Riya</span>
+                <span class="text-sm text-gray-400">Check mail</span>
+            </div>
+            <span class="text-xs text-gray-400">7m</span>
+        </div>
+
+        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 cursor-pointer">
+            <img src="https://i.pravatar.cc/43" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col flex-1">
+                <span class="font-semibold">Rahul</span>
+                <span class="text-sm text-gray-400">Done work</span>
+            </div>
+            <span class="text-xs text-gray-400">9m</span>
+        </div>
+
+        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 cursor-pointer">
+            <img src="https://i.pravatar.cc/44" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col flex-1">
+                <span class="font-semibold">Neha</span>
+                <span class="text-sm text-gray-400">Okay</span>
+            </div>
+            <span class="text-xs text-gray-400">12m</span>
+        </div>
+
+        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 cursor-pointer">
+            <img src="https://i.pravatar.cc/45" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col flex-1">
+                <span class="font-semibold">Karan</span>
+                <span class="text-sm text-gray-400">Send file</span>
+            </div>
+            <span class="text-xs text-gray-400">15m</span>
+        </div>
+
+        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 cursor-pointer">
+            <img src="https://i.pravatar.cc/46" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col flex-1">
+                <span class="font-semibold">Simran</span>
+                <span class="text-sm text-gray-400">Hello</span>
+            </div>
+            <span class="text-xs text-gray-400">18m</span>
+        </div>
+
+        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 cursor-pointer">
+            <img src="https://i.pravatar.cc/47" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col flex-1">
+                <span class="font-semibold">Arjun</span>
+                <span class="text-sm text-gray-400">Call me</span>
+            </div>
+            <span class="text-xs text-gray-400">20m</span>
+        </div>
+
+        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 cursor-pointer">
+            <img src="https://i.pravatar.cc/48" class="w-10 h-10 rounded-full">
+            <div class="flex flex-col flex-1">
+                <span class="font-semibold">Priya</span>
+                <span class="text-sm text-gray-400">Good morning</span>
+            </div>
+            <span class="text-xs text-gray-400">25m</span>
+        </div>
+
+    </div>
+
+    <!-- CHAT AREA -->
+    <div class="flex flex-col flex-1 px-4">
+
+        <!-- HEADER -->
+        <div class="flex items-center justify-between py-4 border-b">
+            <h3 class="font-semibold text-lg">Design Team</h3>
+        </div>
+
+        <!-- MESSAGES (25+) -->
+        <div class="flex flex-col flex-1 overflow-y-auto gap-3 py-4 no-scrollbar">
+
+            <!-- repeating messages -->
+            
+            <!-- SENT / RECEIVED messages repeated to simulate 25-30 chats -->
+
+            <div class="flex items-end gap-3">
+                <div class="w-10 h-10 bg-gray-500 rounded-full"></div>
+                <div class="bg-gray-700 px-4 py-2 rounded-2xl max-w-xs">Hello team</div>
+            </div>
+
+            <div class="flex justify-end">
+                <div class="bg-red-600 px-4 py-2 rounded-2xl max-w-xs">Hi</div>
+            </div>
+
+            <div class="flex items-end gap-3">
+                <div class="w-10 h-10 bg-gray-500 rounded-full"></div>
+                <div class="bg-gray-700 px-4 py-2 rounded-2xl max-w-xs">Project update done</div>
+            </div>
+
+            <div class="flex justify-end">
+                <div class="bg-red-600 px-4 py-2 rounded-2xl max-w-xs">Great work</div>
+            </div>
+
+            <div class="flex items-end gap-3">
+                <div class="w-10 h-10 bg-gray-500 rounded-full"></div>
+                <div class="bg-gray-700 px-4 py-2 rounded-2xl max-w-xs">Meeting at 4 PM</div>
+            </div>
+
+            <div class="flex justify-end">
+                <div class="bg-red-600 px-4 py-2 rounded-2xl max-w-xs">Okay</div>
+            </div>
+
+            <!-- typing indicator -->
+            <div class="flex items-end gap-3">
+                <div class="w-10 h-10 bg-gray-500 rounded-full"></div>
+                <div class="bg-gray-700 px-4 py-2 rounded-2xl">
+                    <div class="typing-dots flex gap-1">
+                        <span>.</span>
+                        <span>.</span>
+                        <span>.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- INPUT -->
+        <div class="flex items-center gap-3 py-3 border-t">
+
+            <button onclick="toggleEmoji()">
+                <i class="fa fa-face-smile"></i>
+            </button>
+
+            <input type="text" placeholder="Type message"
+                class="flex-1 px-4 py-2 rounded-full border text-black">
+
+            <label>
+                <i class="fa fa-paperclip cursor-pointer"></i>
+                <input type="file" hidden>
+            </label>
+
+            <button class="bg-red-600 px-4 py-2 rounded-full">
+                <i class="fa fa-paper-plane"></i>
+            </button>
+
+        </div>
+
+        <!-- EMOJI BOX -->
+        <div id="emojiBox" class="hidden flex gap-3 p-3 border-t">
+            <span>😀</span>
+            <span>😂</span>
+            <span>😍</span>
+            <span>👍</span>
+            <span>🔥</span>
+        </div>
+
+    </div>
+
+    <!-- GROUP INFO -->
+    <div class="hidden lg:flex w-72 border-l flex-col p-6 gap-4">
+
+        <!-- GROUP HEADER -->
+
+        <div class="flex flex-col items-center mb-4">
+
+            <!-- GROUP LOGO -->
+            <img src="https://i.pravatar.cc/100?img=12" 
+                 class="w-20 h-20 rounded-full neon mb-3">
+
+            <!-- GROUP NAME -->
+            <h2 class="text-xl font-bold">
+                Design Team Alpha
+            </h2>
+
+            <!-- GROUP DESCRIPTION -->
+            <p class="text-sm text-gray-400 text-center mt-2 px-2">
+                This group is created for sharing important updates, project discussions,
+                meeting schedules, and team collaboration. Please keep communication
+                professional and relevant to the project tasks.
+            </p>
+
+        </div>
+
+        <h3 class="font-semibold text-lg">Members</h3>
+
+        <!-- MEMBERS -->
+        <div class="flex items-center gap-3">
+            <img src="https://i.pravatar.cc/60" class="w-10 h-10 rounded-full">
+            <span>Vansh</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <img src="https://i.pravatar.cc/61" class="w-10 h-10 rounded-full">
+            <span>Aman</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <img src="https://i.pravatar.cc/62" class="w-10 h-10 rounded-full">
+            <span>Riya</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <img src="https://i.pravatar.cc/63" class="w-10 h-10 rounded-full">
+            <span>Rahul</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <img src="https://i.pravatar.cc/64" class="w-10 h-10 rounded-full">
+            <span>Neha</span>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function toggleTheme() {
+    document.documentElement.classList.toggle('light');
+}
+
+function toggleEmoji() {
+    const box = document.getElementById('emojiBox');
+    box.classList.toggle('hidden');
+}
+
+</script>
+
+</body>
+</html>
