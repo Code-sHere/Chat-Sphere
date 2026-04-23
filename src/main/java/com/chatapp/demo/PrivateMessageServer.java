@@ -35,6 +35,11 @@ public class PrivateMessageServer {
         private Long getUserIdByUsername(String username) {
 
                 UserEntity user = userrepository.findByEmail(username);
+                if (user == null) {
+                        throw new RuntimeException(
+                                        "User not found: " + username);
+                }
+
                 return user.getId();
         }
 
@@ -44,10 +49,9 @@ public class PrivateMessageServer {
 
                 UserEntity receiver = userrepository.findByEmail(receiverName);
 
-                ChatEntity chat = chatrepository
-                                .findPrivateChat(
-                                                senderId,
-                                                receiver.getId());
+                String chatName = senderId + "-" + receiver.getId();
+
+                ChatEntity chat = chatrepository.findByChatName(chatName);
 
                 if (chat == null) {
 
@@ -87,6 +91,7 @@ public class PrivateMessageServer {
 
                 System.out.println("Connected users: "
                                 + usersDirectory.keySet());
+                boradcastOnlineUsers();
         }
 
         @OnMessage
@@ -125,8 +130,11 @@ public class PrivateMessageServer {
                  * Later we will fetch real IDs from DB
                  */
 
-                Long chatId = getOrCreatedChat(sender, receiver);
                 Long senderId = getUserIdByUsername(sender);
+
+                Long chatId = getOrCreateChat(
+                                senderId,
+                                receiver);
 
                 /*
                  * SAVE MESSAGE TO DATABASE
@@ -146,10 +154,7 @@ public class PrivateMessageServer {
 
                         sendMessage(
                                         receiverSession,
-                                        "Message from "
-                                                        + sender
-                                                        + ": "
-                                                        + text);
+                                        sender + ":" + text);
 
                 } else {
 
@@ -172,6 +177,8 @@ public class PrivateMessageServer {
 
                 System.out.println(
                                 username + " disconnected");
+
+                boradcastOnlineUsers();
         }
 
         private void sendMessage(
@@ -187,6 +194,18 @@ public class PrivateMessageServer {
 
                         e.printStackTrace();
 
+                }
+        }
+
+        private void boradcastOnlineUsers() {
+                String users = String.join(",", usersDirectory.keySet());
+
+                for (Session session : usersDirectory.values()) {
+                        try {
+                                session.getBasicRemote().sendText("Online users: " + users);
+                        } catch (IOException e) {
+                                e.printStackTrace();
+                        }
                 }
         }
 }

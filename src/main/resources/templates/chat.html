@@ -1,181 +1,77 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messaging UI - Dark & Light Theme</title>
+    <title>Private Chat</title>
 
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="../../static/Css/style1.css">
-
+    <script th:src="@{/css/style1.css}"></script>
 </head>
 
-<body class="overflow-hidden">
+<body class="h-screen flex">
 
+    <!-- USER LIST -->
+    <div class="w-72 border-r flex flex-col">
 
-    <div class="flex h-screen w-full">
-
-        <!-- SIDEBAR -->
-        <div class="w-16 md:w-20 flex flex-col justify-between items-center py-6 text-white bg-black neon">
-
-            <div class="flex flex-col items-center gap-8">
-
-                <div class="text-2xl">💬</div>
-
-                <i class="fa fa-user text-lg cursor-pointer hover-glow"></i>
-                <i class="fa fa-message text-lg cursor-pointer hover-glow"></i>
-                <i class="fa fa-bell text-lg cursor-pointer hover-glow"></i>
-
-            </div>
-
-            <div class="flex flex-col gap-6">
-
-                <button onclick="toggleTheme()">
-                    <i class="fa fa-circle-half-stroke text-lg hover-glow"></i>
-                </button>
-
-                <i class="fa fa-gear text-lg hover-glow"></i>
-
-            </div>
-
+        <div class="p-4 font-bold border-b">
+            Users
         </div>
 
-        <div class="w-72 bg-white border-r flex flex-col">
+        <!-- SEARCH -->
+        <input
+            id="searchUser"
+            placeholder="Search user..."
+            class="m-2 border px-3 py-2 rounded"
+            onkeyup="searchUser()"
+        >
 
-            <div class="p-4 border-b font-bold text-lg">
-                Users
-            </div>
-
-            <div id="userList" class="flex-1 overflow-y-auto">
-
-                <!-- Users will load here dynamically -->
-
-            </div>
-
-        </div>
-
-
-        <!-- CHAT AREA -->
-        <div class="flex flex-col flex-1">
-
-            <!-- HEADER -->
-            <div class="p-4 border-b font-semibold text-lg" id="chatHeader">
-                Select a user to start chatting
-            </div>
-
-            <!-- MESSAGES -->
-            <div id="messageContainer" class="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-50">
-
-            </div>
-
-            <!-- INPUT -->
-            <div class="flex items-center gap-2 p-3 border-t bg-white">
-
-                <input id="messageInput" type="text" placeholder="Type message"
-                    class="flex-1 border px-4 py-2 rounded-full">
-
-                <button onclick="sendMessage()" class="bg-blue-600 text-white px-4 py-2 rounded-full">
-                    <i class="fa fa-paper-plane"></i>
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- EMOJI BOX -->
-        <div id="emojiBox" class="hidden flex gap-3 p-3 border-t">
-            <span>😀</span>
-            <span>😂</span>
-            <span>😍</span>
-            <span>👍</span>
-            <span>🔥</span>
+        <!-- USER LIST -->
+        <div
+            id="userList"
+            class="flex-1 overflow-y-auto">
         </div>
 
     </div>
 
-    <!-- GROUP INFO -->
-    <div class="hidden lg:flex w-72 border-l flex-col p-6 gap-4">
+    <!-- CHAT AREA -->
+    <div class="flex flex-col flex-1">
 
-        <!-- GROUP HEADER -->
-
-        <div class="flex flex-col items-center mb-4">
-
-            <!-- GROUP LOGO -->
-            <img src="https://i.pravatar.cc/100?img=12" class="w-20 h-20 rounded-full neon mb-3">
-
-            <!-- GROUP NAME -->
-            <h2 class="text-xl font-bold">
-                Design Team Alpha
-            </h2>
-
-            <!-- GROUP DESCRIPTION -->
-            <p class="text-sm text-gray-400 text-center mt-2 px-2">
-                This group is created for sharing important updates, project discussions,
-                meeting schedules, and team collaboration. Please keep communication
-                professional and relevant to the project tasks.
-            </p>
-
+        <!-- HEADER -->
+        <div
+            id="chatHeader"
+            class="p-4 border-b font-semibold">
+            Select a user to start chatting
         </div>
 
-        <h3 class="font-semibold text-lg">Members</h3>
-
-        <!-- MEMBERS -->
-        <div class="flex items-center gap-3">
-            <img src="https://i.pravatar.cc/60" class="w-10 h-10 rounded-full">
-            <span>Vansh</span>
+        <!-- MESSAGES -->
+        <div
+            id="messageContainer"
+            class="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-100">
         </div>
 
-        <div class="flex items-center gap-3">
-            <img src="https://i.pravatar.cc/61" class="w-10 h-10 rounded-full">
-            <span>Aman</span>
-        </div>
+        <!-- INPUT -->
+        <div class="flex gap-2 p-3 border-t">
 
-        <div class="flex items-center gap-3">
-            <img src="https://i.pravatar.cc/62" class="w-10 h-10 rounded-full">
-            <span>Riya</span>
-        </div>
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="Type message"
+                class="flex-1 border px-4 py-2 rounded-full"
+            >
 
-        <div class="flex items-center gap-3">
-            <img src="https://i.pravatar.cc/63" class="w-10 h-10 rounded-full">
-            <span>Rahul</span>
-        </div>
+            <button
+                onclick="sendMessage()"
+                class="bg-blue-600 text-white px-4 py-2 rounded-full">
+                Send
+            </button>
 
-        <div class="flex items-center gap-3">
-            <img src="https://i.pravatar.cc/64" class="w-10 h-10 rounded-full">
-            <span>Neha</span>
         </div>
 
     </div>
 
-    </div>
-
-    <script src="../static/js/Operation.js"></script>
-
-    <script>
-
-
-        function toggleTheme() {
-            document.documentElement.classList.toggle('light');
-        }
-
-        function toggleEmoji() {
-            const box = document.getElementById('emojiBox');
-            box.classList.toggle('hidden');
-        }
-
-    </script>
-
+    <!-- LOAD JS -->
+    <script th:src="@{/js/Operation.js}"></script>
 
 </body>
-
 </html>

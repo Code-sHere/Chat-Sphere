@@ -42,6 +42,8 @@ public class Passwordconfig {
                         "/register",
                         "/login",
                         "/css/**",
+                        "/private/**",
+                        "/users",
                         "/js/**",
                         "/message/send"
                     ).permitAll()
