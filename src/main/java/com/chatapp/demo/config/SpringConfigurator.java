@@ -1,26 +1,32 @@
 package com.chatapp.demo.config;
 
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.ContextLoader;
-
 import jakarta.websocket.server.ServerEndpointConfig;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
+@Component
 public class SpringConfigurator
-        extends ServerEndpointConfig.Configurator {
+                extends ServerEndpointConfig.Configurator {
 
-    @Override
-    public <T> T getEndpointInstance(
-            Class<T> endpointClass)
-            throws InstantiationException {
+        private static ApplicationContext context;
 
-        ApplicationContext context =
-                ContextLoader
-                        .getCurrentWebApplicationContext();
+        public static void setApplicationContext(
+                        ApplicationContext applicationContext) {
 
-        AutowireCapableBeanFactory factory =
-                context.getAutowireCapableBeanFactory();
+                context = applicationContext;
 
-        return factory.createBean(endpointClass);
-    }
+        }
+
+        @Override
+        public <T> T getEndpointInstance(
+                        Class<T> endpointClass)
+                        throws InstantiationException {
+
+                return context
+                                .getAutowireCapableBeanFactory()
+                                .createBean(endpointClass);
+
+        }
+
 }
