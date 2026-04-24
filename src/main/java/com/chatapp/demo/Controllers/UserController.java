@@ -1,5 +1,6 @@
 package com.chatapp.demo.Controllers;
 
+import com.chatapp.demo.Service.MessageService;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -8,8 +9,11 @@ import java.util.Map;
 
 import com.chatapp.demo.Models.UserEntity;
 import com.chatapp.demo.Service.Userservice;
+import com.chatapp.demo.Service.MessageService;
 import com.chatapp.demo.config.Passwordconfig;
 import org.springframework.security.core.Authentication;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,11 +28,17 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class UserController {
 
+    private final MessageService messageService;
+
     @Autowired
     private Passwordconfig passwordConfig;
 
     @Autowired
     private Userservice userService;
+
+    UserController(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     @PostMapping("/register")
     public String registerUser(
@@ -64,5 +74,5 @@ public class UserController {
 
         return response;
     }
-
+    
 }
