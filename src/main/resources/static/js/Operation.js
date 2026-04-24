@@ -2,7 +2,7 @@ let socket;
 let currentReceiver = "";
 let onlineUsers = [];
 let username = "";
-
+let chatHistory = {};
 
 async function getUsername() {
     try {
@@ -63,9 +63,23 @@ function connectWebsocket() {
             return;
         }
 
-        showReceivedMessage(
-            message
-        );
+        const parts = message.split(":",2);
+
+        if(parts.length === 2){
+            const sender = parts[0];
+            const text = parts[1];
+
+            if(sender === currentReceiver){
+                showReceivedMessage(text);
+            } else {
+                // Store the message in chat history
+                if (!chatHistory[sender]) {
+                    chatHistory[sender] = [];
+                }
+                chatHistory[sender].push(text);
+            }
+        }
+
 
     };
 
@@ -77,7 +91,7 @@ function connectWebsocket() {
 
 }
 
-function selectUser(user) {
+async function selectUser(user) {
 
     currentReceiver = user;
 
@@ -88,10 +102,7 @@ function selectUser(user) {
         .innerText =
         "Chat with " + user;
 
-    console.log(
-        "Selected user:",
-        user
-    );
+    await loadMessages(user);
 
 }
 
@@ -145,9 +156,16 @@ function sendMessage() {
         message
     );
 
-    showSentMessage(
-        text
-    );
+    if(!chatHistory[currentReceiver]){
+        chatHistory[currentReceiver] = [];
+    }
+
+    chatHistory[currentReceiver].push({
+        type: "sent",
+        text: text
+    });
+
+    showSentMessage(text);
 
     input.value = "";
 
@@ -187,6 +205,8 @@ function showSentMessage(text) {
 }
 
 function showReceivedMessage(text) {
+
+    
 
     const container =
         document
@@ -326,5 +346,43 @@ function searchUser() {
         }
 
     );
+
+}
+
+
+async function loadMessages(user) {
+
+    const response =
+        await fetch(
+            `/messages?sender=${username}&receiver=${user}`
+        );
+
+    const messages =
+        await response.json();
+
+    const container =
+        document.getElementById(
+            "messageContainer"
+        );
+
+    container.innerHTML = "";
+
+    messages.forEach(msg => {
+
+        if (msg.senderEmail === username) {
+
+            showSentMessage(
+                msg.text
+            );
+
+        } else {
+
+            showReceivedMessage(
+                msg.text
+            );
+
+        }
+
+    });
 
 }
