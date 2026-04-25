@@ -10,7 +10,7 @@ async function getUsername() {
 
         data = await res.json();
         username = data.username;
-        
+
         console.log("Logged in:", username);
         connectWebsocket();
         loadAllUsers();
@@ -35,6 +35,10 @@ function connectWebsocket() {
 
     socket.onopen = function () {
         console.log("Connected", username);
+
+        if (currentReceiver) {
+            loadMessages(currentReceiver);
+        }
     };
 
     socket.onmessage = function (event) {
@@ -63,20 +67,25 @@ function connectWebsocket() {
             return;
         }
 
-        const parts = message.split(":",2);
+        const parts = message.split(":", 2);
 
-        if(parts.length === 2){
+        if (parts.length === 2) {
             const sender = parts[0];
             const text = parts[1];
 
-            if(sender === currentReceiver){
+            if (sender === currentReceiver) {
                 showReceivedMessage(text);
             } else {
                 // Store the message in chat history
                 if (!chatHistory[sender]) {
                     chatHistory[sender] = [];
                 }
-                chatHistory[sender].push(text);
+                chatHistory[sender].push({
+                    type: "received",
+                    text: text
+                });
+
+                showNotification(sender, text);
             }
         }
 
@@ -91,18 +100,42 @@ function connectWebsocket() {
 
 }
 
-async function selectUser(user) {
+function selectUser(user) {
 
     currentReceiver = user;
 
     document
-        .getElementById(
-            "chatHeader"
-        )
+        .getElementById("chatHeader")
         .innerText =
         "Chat with " + user;
 
-    await loadMessages(user);
+    const container = document.getElementById("messageContainer");
+
+    container.innerHTML = "";
+
+    if (chatHistory[user]) {
+
+        chatHistory[user].forEach(msg => {
+
+            if (msg.type === "sent") {
+
+                showSentMessage(
+                    msg.text
+                );
+
+            } else {
+
+                showReceivedMessage(
+                    msg.text
+                );
+
+            }
+
+        });
+
+    }
+
+    loadMessages(user);
 
 }
 
@@ -156,7 +189,7 @@ function sendMessage() {
         message
     );
 
-    if(!chatHistory[currentReceiver]){
+    if (!chatHistory[currentReceiver]) {
         chatHistory[currentReceiver] = [];
     }
 
@@ -206,7 +239,7 @@ function showSentMessage(text) {
 
 function showReceivedMessage(text) {
 
-    
+
 
     const container =
         document
@@ -365,7 +398,7 @@ async function loadMessages(user) {
             "messageContainer"
         );
 
-    container.innerHTML = "";
+    // container.innerHTML = "";
 
     messages.forEach(msg => {
 
@@ -385,4 +418,16 @@ async function loadMessages(user) {
 
     });
 
+}
+
+function showNotification(sender, text) {
+    if (Notification.permission === "granted") {
+        new Notification(
+            "new message from " + sender, {
+            body: text
+        }
+        );
+    } else {
+        Notification.requestPermission()
+    }
 }
