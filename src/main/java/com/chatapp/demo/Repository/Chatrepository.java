@@ -6,13 +6,24 @@ import java.util.List;
 import com.chatapp.demo.Models.Message;
 import com.chatapp.demo.Models.ChatEntity;
 
-import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface Chatrepository extends JpaRepository<ChatEntity, Long> {
 
+    
     ChatEntity findByChatName(String chatName);
+
+    @Query("""
+    SELECT c FROM ChatEntity c
+    WHERE c.chatName LIKE CONCAT('%', :userId, '%')
+    ORDER BY c.createdAt DESC
+    """)
+    List<ChatEntity> findChatsByUser(
+            @Param("userId")
+            Long userId);
 
 
 }

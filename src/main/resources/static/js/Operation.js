@@ -39,6 +39,8 @@ function connectWebsocket() {
         if (currentReceiver) {
             loadMessages(currentReceiver);
         }
+
+        loadAllUsers();
     };
 
     socket.onmessage = function (event) {
@@ -393,26 +395,27 @@ async function loadMessages(user) {
     const messages =
         await response.json();
 
-    const container =
-        document.getElementById(
-            "messageContainer"
-        );
-
-    // container.innerHTML = "";
+    // chatHistory[user] = [];
 
     messages.forEach(msg => {
 
         if (msg.senderEmail === username) {
 
-            showSentMessage(
-                msg.text
-            );
+            chatHistory[user].push({
+                type: "sent",
+                text: msg.text
+            });
+
+            showSentMessage(msg.text);
 
         } else {
 
-            showReceivedMessage(
-                msg.text
-            );
+            chatHistory[user].push({
+                type: "received",
+                text: msg.text
+            });
+
+            showReceivedMessage(msg.text);
 
         }
 
@@ -420,14 +423,43 @@ async function loadMessages(user) {
 
 }
 
+
+let unreadCount = {};
+
 function showNotification(sender, text) {
+
     if (Notification.permission === "granted") {
         new Notification(
-            "new message from " + sender, {
-            body: text
-        }
+            "New message from " + sender,
+            {
+                body: text
+            }
         );
+
     } else {
-        Notification.requestPermission()
+
+        Notification.requestPermission();
+
     }
+
+    unreadCount[sender] =
+        (unreadCount[sender] || 0) + 1;
 }
+
+
+async function loadChats() {
+
+    const response =
+        await fetch(
+            `/chat/chats?email=${username}`
+        );
+
+    const chats =
+        await response.json();
+
+    console.log("Chats:", chats);
+
+}
+
+
+loadChats();
