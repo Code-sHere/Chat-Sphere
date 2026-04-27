@@ -24,7 +24,7 @@ public class MessageService {
     private Messagerepository messageRepository;
 
     @Autowired
-    private Userservice userrepository;
+    private Userrepository userrepository;
 
     @Autowired
     private Chatrepository chatrepository;
@@ -60,6 +60,8 @@ public class MessageService {
 
         String chatName2 = receiver.getId() + "-" +
                 sender.getId();
+
+        String chatName = "-" + receiver.getId();
 
         ChatEntity chat = chatrepository.findByChatName(chatName1);
 
