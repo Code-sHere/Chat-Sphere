@@ -1,0 +1,82 @@
+package com.chatapp.demo;
+
+import jakarta.websocket.*;
+import jakarta.websocket.server.PathParam;
+import jakarta.websocket.server.ServerEndpoint;
+import java.io.IOException;
+import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import org.springframework.stereotype.Component;
+
+@Component
+@ServerEndpoint("/group/{groupId}/{username}")
+public class GroupChatServer {
+    private static Map<String, Set<Session>> groups = new ConcurrentHashMap<>();
+    private static Map<Session, String> users = new ConcurrentHashMap<>();
+
+    @OnOpen
+    public void onOpen(
+        Session session,
+        @PathParam("groupId") String groupId,
+        @PathParam("username") String username
+    ){
+        users.put(session, username);
+
+        groups.computeIfAbsent(groupId, k -> new CopyOnWriteArraySet<>()).add(session);
+
+        try{
+            broadcast(groupId, username + " Joined Group");
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @OnMessage
+    public void onMessage(
+        String message,
+        Session sender,
+        @PathParam("groupId") String groupId
+    ) throws IOException{
+        String username = users.get(sender);
+
+        if(username != null){
+            broadcast(groupId, username + ": " + message);
+        }
+   }
+
+    @OnClose
+    public void onClose(
+        Session session,
+        @PathParam("groupId") String groupId
+    ) throws IOException{
+        String username = users.remove(session);
+
+       Set<Session> members = groups.get(groupId);
+
+       if(members != null){
+        members.remove(session);
+       }
+
+       broadcast(groupId, username + " left the grpoup");
+
+    }
+
+
+    public void broadcast(String groupId, String message)
+    throws IOException{
+
+        Set<Session> members = groups.get(groupId);
+
+        if(members == null){
+            return;
+        }
+        for(Session client : members){
+            if(client.isOpen()){
+                client.getBasicRemote().sendText(message);
+            }
+        }
+    }
+}

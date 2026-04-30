@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.jdbc.repository.query.Query;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.chatapp.demo.Models.UserEntity;
@@ -19,11 +19,11 @@ public class Userrepository {
 
     public void saveUser(UserEntity user) {
 
-        String sql = "INSERT INTO users (name, email, password, about) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (username, email, password, about) VALUES (?, ?, ?, ?)";
 
         jdbcTemplate.update(
                 sql,
-                user.getName(),
+                user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getAbout()
@@ -43,7 +43,7 @@ public class Userrepository {
                     UserEntity user = new UserEntity();
 
                     user.setId(rs.getLong("id")); 
-                    user.setName(rs.getString("name"));
+                    user.setUsername(rs.getString("username"));
                     user.setEmail(rs.getString("email"));
                     user.setPassword(rs.getString("password"));
                     user.setAbout(rs.getString("about"));
@@ -58,13 +58,13 @@ public class Userrepository {
     }
 
     public List<UserEntity> findAllUsers(){
-        String sql = "SELECT id, name, email, password, about From users";
+        String sql = "SELECT id, username, email, password, about From users";
 
         return jdbcTemplate.query(sql,(rs, rowNum) -> {
             UserEntity user = new UserEntity();
 
             user.setId(rs.getLong("id")); 
-            user.setName(rs.getString("name"));
+            user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
             user.setAbout(rs.getString("about"));

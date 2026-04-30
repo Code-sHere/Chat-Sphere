@@ -43,6 +43,7 @@ public class Passwordconfig {
                         "/login",
                         "/css/**",
                         "/private/**",
+                        "/group/**",
                         "/users",
                         "/js/**",
                         "/message/send"
@@ -54,7 +55,7 @@ public class Passwordconfig {
                     .loginPage("/login")
                     .usernameParameter("email")
                     .passwordParameter("password")
-                    .loginProcessingUrl("/login")
+                    .loginProcessingUrl("/auth/login")
                     .defaultSuccessUrl("/chat", true)
                     .permitAll()
                 )

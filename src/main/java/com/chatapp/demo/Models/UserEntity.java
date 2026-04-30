@@ -1,7 +1,11 @@
 package com.chatapp.demo.Models;
 
-public class UserEntity {
+import jakarta.persistence.Table;
 
+
+
+
+public class UserEntity {
     private Long id;
 
     private String username;
@@ -36,6 +40,7 @@ public class UserEntity {
         return username;
     }
 
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -48,9 +53,10 @@ public class UserEntity {
         return username;
     }
 
-    public void setName(String name) {
-        this.username = name;
+    public void setName(String username) {
+        this.username = username;
     }
+
 
     public String getEmail() {
         return email;

@@ -2,7 +2,7 @@ let socket;
 let currentReceiver = "";
 let onlineUsers = [];
 let username = "";
-let chatHistory = {};
+let chatHistory = [];
 
 async function getUsername() {
     try {
@@ -12,8 +12,13 @@ async function getUsername() {
         username = data.username;
 
         console.log("Logged in:", username);
+        
         connectWebsocket();
+
         loadAllUsers();
+
+        loadChats();
+
     } catch (error) {
         console.error("Error fetching username:", error);
     }
@@ -62,7 +67,8 @@ function connectWebsocket() {
                         "Online users:",
                         ""
                     )
-                    .split(",");
+                    .split(",")
+                    .map(u => u.trim());
 
             loadAllUsers();
 
@@ -102,6 +108,7 @@ function connectWebsocket() {
 
 }
 
+
 function selectUser(user) {
 
     currentReceiver = user;
@@ -111,34 +118,33 @@ function selectUser(user) {
         .innerText =
         "Chat with " + user;
 
-    const container = document.getElementById("messageContainer");
+    const container =
+        document.getElementById("messageContainer");
 
     container.innerHTML = "";
 
-    if (chatHistory[user]) {
-
-        chatHistory[user].forEach(msg => {
-
-            if (msg.type === "sent") {
-
-                showSentMessage(
-                    msg.text
-                );
-
-            } else {
-
-                showReceivedMessage(
-                    msg.text
-                );
-
-            }
-
-        });
-
+    if (!chatHistory[user]) {
+        chatHistory[user] = [];
     }
 
-    loadMessages(user);
+    if(chatHistory[user].length ===0){
+        loadMessages(user);
+    }
 
+    chatHistory[user].forEach(msg => {
+
+        if (msg.type === "sent") {
+
+            showSentMessage(msg.text);
+
+        } else {
+
+            showReceivedMessage(msg.text);
+
+        }
+
+        });
+    
 }
 
 function sendMessage() {
@@ -290,62 +296,55 @@ async function loadAllUsers() {
 function renderUserList(users) {
 
     const userList =
-        document
-            .getElementById(
-                "userList"
+        document.getElementById("userList");
+
+    userList.innerHTML = "";
+
+    users.forEach(user => {
+
+        if (user.email.trim() === username.trim())
+            return;
+
+        const isOnline =
+            onlineUsers.includes(user.email);
+
+        const dot =
+            isOnline
+                ? "bg-green-500"
+                : "bg-red-400";
+
+        const preview =
+            lastMessagePreview(
+                chatHistory[user.email]
             );
 
-    userList.innerHTML =
-        "";
+        const div =
+            document.createElement("div");
 
-    users.forEach(
-        user => {
+        div.className =
+            "flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100";
 
-            if (
-                user.email.trim() ===
-                username.trim()
-            )
-                return;
+        div.onclick =
+            () => selectUser(user.email);
 
-            const isOnline =
-                onlineUsers.includes(
-                    user.email
-                );
+        div.innerHTML = `
+            <span class="w-3 h-3 ${dot} rounded-full mt-2"></span>
 
-            const dot =
-                isOnline
-                    ? "bg-green-500"
-                    : "bg-gray-400";
+            <div class="flex flex-col">
 
-            const div =
-                document
-                    .createElement(
-                        "div"
-                    );
+                <span class="font-semibold">
+                    ${user.username}
+                </span>
 
-            div.className =
-                "flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100";
+                <span class="text-sm text-gray-500 truncate w-48">
+                    ${preview}
+                </span>
 
-            div.onclick =
-                () =>
-                    selectUser(
-                        user.email
-                    );
+            </div>
+        `;
 
-            div.innerHTML =
-                `
-                <span class="w-3 h-3 ${dot} rounded-full"></span>
-                <span>${user.email}</span>
-                `;
-
-            userList.appendChild(
-                div
-            );
-
-        }
-
-    );
-
+        userList.appendChild(div);
+    });
 }
 
 function searchUser() {
@@ -395,7 +394,9 @@ async function loadMessages(user) {
     const messages =
         await response.json();
 
-    // chatHistory[user] = [];
+    if(!chatHistory[user]) {
+        chatHistory[user] = [];
+    }
 
     messages.forEach(msg => {
 
@@ -427,23 +428,27 @@ async function loadMessages(user) {
 let unreadCount = {};
 
 function showNotification(sender, text) {
+  if (Notification.permission === "granted") {
 
-    if (Notification.permission === "granted") {
-        new Notification(
-            "New message from " + sender,
-            {
-                body: text
-            }
-        );
+    const notification = new Notification(`New message from ${sender}`, {
+      body: text
+    });
 
-    } else {
+    setTimeout(() => {
+      notification.close();
+    }, 3000);
 
-        Notification.requestPermission();
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+        
+        const notification = new Notification(`New message from ${sender}`, { body: text });
+        setTimeout(() => notification.close(), 3000);
+      }
+    });
+  }
 
-    }
-
-    unreadCount[sender] =
-        (unreadCount[sender] || 0) + 1;
+  unreadCount[sender] = (unreadCount[sender] || 0) + 1;
 }
 
 
@@ -459,7 +464,25 @@ async function loadChats() {
 
     console.log("Chats:", chats);
 
+    chatHistory.forEach(chat =>{
+        const otherUser = chat.chatName.replace(username, "").replace("_","");
+
+        if(otherUser){
+            loadMessages(otherUser);
+        }
+    })
+
 }
 
 
 loadChats();
+
+function lastMessagePreview(chat){
+    if(!chat || !chat.messages || chat.messages.length === 0) return "No messages yet";
+
+    const lastMsg = chat.messages[chat.messages.length - 1];
+
+    if(!lastMsg) return "No messages yet";
+
+    return lastMsg.text.length > 30 ? lastMsg.text.substring(0, 30) + "..." : lastMsg.text;
+}

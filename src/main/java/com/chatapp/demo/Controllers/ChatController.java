@@ -51,12 +51,9 @@ public class ChatController {
         if (user == null) {
             return List.of();
         }
-
-        Long userId =
-                user.getId();
-
+        
         return chatRepository
-                .findChatsByUser(userId);
+                .findChatsByUser(email);
     }
 
 }
