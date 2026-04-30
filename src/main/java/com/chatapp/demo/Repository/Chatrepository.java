@@ -18,12 +18,12 @@ public interface Chatrepository extends JpaRepository<ChatEntity, Long> {
 
     @Query("""
     SELECT c FROM ChatEntity c
-    WHERE c.chatName LIKE CONCAT('%', :userId, '%')
+    WHERE c.chatName LIKE CONCAT('%', :email, '%')
     ORDER BY c.createdAt DESC
     """)
     List<ChatEntity> findChatsByUser(
-            @Param("userId")
-            Long userId);
+            @Param("email")
+            String email);
 
 
 }

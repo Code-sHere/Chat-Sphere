@@ -125,29 +125,16 @@ public class PrivateMessageServer {
 
                 Session receiverSession = usersDirectory.get(receiver);
 
-                /*
-                 * TEMPORARY VALUES
-                 * Later we will fetch real IDs from DB
-                 */
-
                 Long senderId = getUserIdByUsername(sender);
 
                 Long chatId = getOrCreateChat(
                                 senderId,
                                 receiver);
 
-                /*
-                 * SAVE MESSAGE TO DATABASE
-                 */
-
                 messageService.sendMessage(
                                 chatId,
                                 senderId,
                                 text);
-
-                /*
-                 * SEND MESSAGE TO RECEIVER
-                 */
 
                 if (receiverSession != null
                                 && receiverSession.isOpen()) {
