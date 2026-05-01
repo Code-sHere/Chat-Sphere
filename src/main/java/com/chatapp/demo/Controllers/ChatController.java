@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import com.chatapp.demo.Models.ChatEntity;
+import com.chatapp.demo.Models.GroupMember;
 import com.chatapp.demo.Models.UserEntity;
 import com.chatapp.demo.Repository.Chatrepository;
 import com.chatapp.demo.Service.ChatService;

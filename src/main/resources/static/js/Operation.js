@@ -486,3 +486,7 @@ function lastMessagePreview(chat){
 
     return lastMsg.text.length > 30 ? lastMsg.text.substring(0, 30) + "..." : lastMsg.text;
 }
+
+function Groups(){
+    window.location.href ="/group";
+}

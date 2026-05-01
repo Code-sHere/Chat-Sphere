@@ -11,6 +11,9 @@ async function getUsername() {
 }
 
 async function connectWebSocket(groupId) {
+   
+    currentSGroupId = groupId;
+
     await getUsername();
 
     socket = new WebSocket(
@@ -34,7 +37,7 @@ async function connectWebSocket(groupId) {
 
 }
 
-function SendMessage(groupId, message) {
+function sendMessage(groupId, message) {
     const input = document.getElementById("messageInput");
 
     const text = input.value.trim();
@@ -109,15 +112,13 @@ function showReceivedMessage(text) {
 }
 
 async function createRoom(){
-    const response = await fetch("/group/create",{
+    const response = await fetch("/api/group/create",{
         method:"POST"
     });
 
     const roomId = await response.text();
 
     alert("Group created with ID: " + roomId);
-
-    connectWebSocket(roomId);
     openGroupPage(roomId);
 
 }
@@ -130,14 +131,13 @@ function joinRoom(){
         return;
     }
 
-    connectWebSocket(roomId);
     openGroupPage(roomId);
 }
 
 function openGroupPage(roomId) {
 
     window.location.href =
-        `/group-chat.html?roomId=${roomId}`;
+        `/group?roomId=${roomId}`;
 }
 
 function leaveRoom(){
@@ -146,4 +146,18 @@ function leaveRoom(){
     }
     alert("You have left the group chat");
     window.location.href = "/private";
+}   
+
+window.onload = async function(){
+
+    const params = new URLSearchParams(window.location.search);
+
+    const roomId = params.get("roomId");
+
+    if(roomId){
+
+        await connectWebSocket(roomId);
+
+        document.getElementById("roomIdDisplay").innerText = "Group ID: " + roomId;
+    }
 }

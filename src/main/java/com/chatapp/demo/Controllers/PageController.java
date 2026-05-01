@@ -21,4 +21,9 @@ public class PageController {
         return "chat";
     }
 
+    @GetMapping("/group")
+    public String showGroupPage(){
+        return "groupchat";
+    }
+
 }
