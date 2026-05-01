@@ -58,9 +58,16 @@ public class GroupChatServer {
 
        if(members != null){
         members.remove(session);
+
+        if(members.isEmpty()){
+            groups.remove(groupId);
+        }
+
        }
 
-       broadcast(groupId, username + " left the grpoup");
+       if(username != null){
+        broadcast(groupId, username + " left the grpoup");
+       }
 
     }
 
