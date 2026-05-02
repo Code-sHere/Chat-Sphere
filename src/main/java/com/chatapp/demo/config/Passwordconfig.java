@@ -41,6 +41,8 @@ public class Passwordconfig {
                     .requestMatchers(
                         "/register",
                         "/login",
+                        "/chat",
+                        "/group",
                         "/css/**",
                         "/private/**",
                         "/group/**",

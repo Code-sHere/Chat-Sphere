@@ -2,7 +2,26 @@ let socket;
 let currentReceiver = "";
 let onlineUsers = [];
 let username = "";
-let chatHistory = [];
+let chatHistory = {};
+
+
+const emojiBtn = document.getElementById("emojiBtn");
+const pickerContainer = document.getElementById("emojiPickerContainer");
+const messageInput = document.getElementById("messageInput");
+
+emojiBtn.addEventListener("click", () => {
+    pickerContainer.classList.toggle("hidden");
+});
+
+document
+    .querySelector("emoji-picker")
+    .addEventListener("emoji-click", event => {
+
+        messageInput.value += event.detail.unicode;
+
+        messageInput.focus();
+    });
+
 
 async function getUsername() {
     try {
@@ -464,7 +483,7 @@ async function loadChats() {
 
     console.log("Chats:", chats);
 
-    chatHistory.forEach(chat =>{
+    Object.keys(chatHistory).forEach(chat =>{
         const otherUser = chat.chatName.replace(username, "").replace("_","");
 
         if(otherUser){
