@@ -31,7 +31,7 @@ async function getUsername() {
         username = data.username;
 
         console.log("Logged in:", username);
-        
+
         connectWebsocket();
 
         loadAllUsers();
@@ -146,7 +146,7 @@ function selectUser(user) {
         chatHistory[user] = [];
     }
 
-    if(chatHistory[user].length ===0){
+    if (chatHistory[user].length === 0) {
         loadMessages(user);
     }
 
@@ -162,8 +162,8 @@ function selectUser(user) {
 
         }
 
-        });
-    
+    });
+
 }
 
 function sendMessage() {
@@ -225,6 +225,23 @@ function sendMessage() {
         text: text
     });
 
+
+    const messageInput =
+        document.getElementById("messageInput");
+
+    messageInput.addEventListener(
+        "keypress",
+        function (e) {
+
+            if (e.key === "Enter") {
+
+                sendMessage();
+
+            }
+
+        }
+    );
+
     showSentMessage(text);
 
     input.value = "";
@@ -250,7 +267,7 @@ function showSentMessage(text) {
 
     div.innerHTML =
         `
-        <div class="bg-blue-600 text-white px-4 py-2 rounded-2xl max-w-xs">
+        <div class="sent-msg text-white px-4 py-2 rounded-2xl max-w-xs">
             ${text}
         </div>
         `;
@@ -285,7 +302,7 @@ function showReceivedMessage(text) {
 
     div.innerHTML =
         `
-        <div class="bg-gray-600 text-white px-4 py-2 rounded-2xl max-w-xs">
+        <div class="received-msg text-white px-4 py-2 rounded-2xl max-w-xs">
             ${text}
         </div>
         `;
@@ -341,23 +358,26 @@ function renderUserList(users) {
             document.createElement("div");
 
         div.className =
-            "flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100";
+            "user-card flex items-center gap-3 p-3 cursor-pointer";
 
         div.onclick =
             () => selectUser(user.email);
 
         div.innerHTML = `
-            <span class="w-3 h-3 ${dot} rounded-full mt-2"></span>
 
-            <div class="flex flex-col">
+            <div class="flex flex-col flex-1 rounded-lg p-2 bg-transparent">
 
-                <span class="font-semibold">
-                    ${user.username}
-                </span>
+                <div class="flex justify-between items-center">
+                    <span class="font-semibold">
+                        ${user.username}
+                    </span>
+                </div>
 
-                <span class="text-sm text-gray-500 truncate w-48">
-                    ${preview}
-                </span>
+                <div class="flex items-center gap-2 mt-1"> 
+                    <span class="user-preview text-sm text-[#9aa4c3] truncate max-w-[150px]">
+                        ${preview}
+                    </span> 
+                </div>
 
             </div>
         `;
@@ -413,7 +433,7 @@ async function loadMessages(user) {
     const messages =
         await response.json();
 
-    if(!chatHistory[user]) {
+    if (!chatHistory[user]) {
         chatHistory[user] = [];
     }
 
@@ -447,27 +467,27 @@ async function loadMessages(user) {
 let unreadCount = {};
 
 function showNotification(sender, text) {
-  if (Notification.permission === "granted") {
+    if (Notification.permission === "granted") {
 
-    const notification = new Notification(`New message from ${sender}`, {
-      body: text
-    });
+        const notification = new Notification(`New message from ${sender}`, {
+            body: text
+        });
 
-    setTimeout(() => {
-      notification.close();
-    }, 3000);
+        setTimeout(() => {
+            notification.close();
+        }, 3000);
 
-  } else if (Notification.permission !== "denied") {
-    Notification.requestPermission().then(permission => {
-      if (permission === "granted") {
-        
-        const notification = new Notification(`New message from ${sender}`, { body: text });
-        setTimeout(() => notification.close(), 3000);
-      }
-    });
-  }
+    } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
 
-  unreadCount[sender] = (unreadCount[sender] || 0) + 1;
+                const notification = new Notification(`New message from ${sender}`, { body: text });
+                setTimeout(() => notification.close(), 3000);
+            }
+        });
+    }
+
+    unreadCount[sender] = (unreadCount[sender] || 0) + 1;
 }
 
 
@@ -483,10 +503,10 @@ async function loadChats() {
 
     console.log("Chats:", chats);
 
-    Object.keys(chatHistory).forEach(chat =>{
-        const otherUser = chat.chatName.replace(username, "").replace("_","");
+    Object.keys(chatHistory).forEach(chat => {
+        const otherUser = chat.chatName.replace(username, "").replace("_", "");
 
-        if(otherUser){
+        if (otherUser) {
             loadMessages(otherUser);
         }
     })
@@ -496,16 +516,16 @@ async function loadChats() {
 
 loadChats();
 
-function lastMessagePreview(chat){
-    if(!chat || !chat.messages || chat.messages.length === 0) return "No messages yet";
+function lastMessagePreview(chat) {
+    if (!chat || !chat.messages || chat.messages.length === 0) return "";
 
-    const lastMsg = chat.messages[chat.messages.length - 1];
+    const lastMsg = chat[chat.length - 1];
 
-    if(!lastMsg) return "No messages yet";
+    if (!lastMsg) return "";
 
     return lastMsg.text.length > 30 ? lastMsg.text.substring(0, 30) + "..." : lastMsg.text;
 }
 
-function Groups(){
-    window.location.href ="/group";
+function Groups() {
+    window.location.href = "/group";
 }
