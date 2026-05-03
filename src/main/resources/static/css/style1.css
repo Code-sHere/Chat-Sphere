@@ -1,23 +1,87 @@
-body {
-            background: #38000A;
-        }
+body{
+    background: linear-gradient(180deg, #B51A2B, #161E2F);
+    color: white;
+}
 
-        .user-panel {
-            background: #9B1313;
-            color: white;
-        }
+.glass{
+    background: rgba(36,47,73,0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: 6px 6px 16px rgba(0,0,0,0.6),
+    -6px -6px 16px rgba(255,255,255,0.05);
+}
 
-        .glass {
-            background: #CD1C18;
-            color: white;
-        }
+.user-panel{
+    background: #161E2F;
+    box-shadow: inset 4px 4px 12px rgba(0,0,0,0.6),
+    inset -4px -4px 12px rgba(255,255,255,0.03);
+}
+input{
+    background: #242F49;
+    color: white;
+    box-shadow: inset 3px 3px 8px rgba(0,0,0,0.6),
+    inset -3px -3px 8px rgba(255,255,255,0.05);
+}
 
-        input {
-            background: white;
-            color: black;
-        }
+button{
+    transition: all 0.2s ease-in-out;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.6),
+    -4px -4px 10px rgba(255,255,255,0.05);
+}
 
-        .user-item:hover {
-            background: #FFA896;
-            color: black;
-        }
+button:hover{
+    box-shadow: inset 3px 3px 8px rgba(0,0,0,0.6),
+    inset -3px -3px 8px rgba(255,255,255,0.05);
+}
+
+#messageContainer{
+    background: transparent;
+}
+
+.sent-msg{
+    background: linear-gradient(145deg, #B51A2B, #ff3b3b);
+    box-shadow: 0 0 15px rgba(255, 60, 60, 0.6);
+}
+
+.received-msg{
+    background: #2c3550;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.5),
+    -4px -4px 10px rgba(255,255,255,0.05);
+}
+.user-card {
+    border-radius: 18px;
+    background: linear-gradient(145deg, #1c253a, #121a2b);
+    box-shadow: 
+        6px 6px 16px rgba(0,0,0,0.6),
+        -6px -6px 16px rgba(255,255,255,0.04);
+    transition: all 0.25s ease;
+    margin: 6px 10px;
+}
+
+.user-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 
+        10px 10px 20px rgba(0,0,0,0.7),
+        -6px -6px 16px rgba(255,255,255,0.05);
+}
+
+
+.user-card:active {
+    transform: scale(0.98);
+    box-shadow: 
+        inset 4px 4px 10px rgba(0,0,0,0.7),
+        inset -4px -4px 10px rgba(255,255,255,0.05);
+}
+
+
+.user-card span.font-semibold {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+
+.user-card .text-gray-500 {
+    color: #9aa4c3;
+    font-size: 12px;
+}
