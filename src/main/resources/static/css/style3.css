@@ -1,0 +1,59 @@
+body {
+    background: linear-gradient(180deg, #B51A2B, #161E2F);
+    color: white;
+}
+
+/* GLASS EFFECT */
+.glass {
+    background: rgba(36,47,73,0.6);
+    backdrop-filter: blur(16px);
+    border-radius: 20px;
+    box-shadow:
+        6px 6px 16px rgba(0,0,0,0.6),
+        -6px -6px 16px rgba(255,255,255,0.05);
+}
+
+/* LEFT PANEL */
+.user-panel {
+    background: #161E2F;
+    box-shadow:
+        inset 4px 4px 12px rgba(0,0,0,0.6),
+        inset -4px -4px 12px rgba(255,255,255,0.03);
+}
+
+/* INPUT */
+input {
+    background: #242F49;
+    color: white;
+    box-shadow:
+        inset 3px 3px 8px rgba(0,0,0,0.6),
+        inset -3px -3px 8px rgba(255,255,255,0.05);
+}
+
+/* BUTTON */
+button {
+    transition: all 0.2s ease-in-out;
+    box-shadow:
+        4px 4px 10px rgba(0,0,0,0.6),
+        -4px -4px 10px rgba(255,255,255,0.05);
+}
+
+button:hover {
+    box-shadow:
+        inset 3px 3px 8px rgba(0,0,0,0.6),
+        inset -3px -3px 8px rgba(255,255,255,0.05);
+}
+
+/* MESSAGES */
+.sent-msg {
+    background: linear-gradient(145deg, #B51A2B, #ff3b3b);
+    box-shadow: 0 0 15px rgba(255, 60, 60, 0.6);
+}
+
+.received-msg {
+    background: #2c3550;
+}
+
+#messageContainer {
+    scroll-behavior: smooth;
+}

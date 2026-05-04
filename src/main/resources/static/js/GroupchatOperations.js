@@ -67,7 +67,7 @@ function ShowSentMessages(text) {
     div.className = "flex justify-end";
 
     div.innerHTML = `
-        <div class = "bg-blue-600 text-white px-4 py-2 rounded-2xl max-w-xs">
+        <div class = "sent-msg text-white px-4 py-2 rounded-2xl max-w-xs">
         ${text}
         </div>`
 
@@ -97,7 +97,7 @@ function showReceivedMessage(text) {
 
     div.innerHTML =
         `
-        <div class="bg-gray-600 text-white px-4 py-2 rounded-2xl max-w-xs">
+        <div class="received-msg bg-gray-600 text-white px-4 py-2 rounded-2xl max-w-xs">
             ${text}
         </div>
         `;
@@ -112,15 +112,24 @@ function showReceivedMessage(text) {
 }
 
 async function createRoom(){
-    const response = await fetch("/api/group/create",{
-        method:"POST"
+
+    const response = await fetch("/api/group/create", {
+        method: "POST"
     });
 
-    const roomId = await response.text();
+    // DEBUG: see what backend returns
+    const text = await response.text();
+    console.log("Server response:", text);
 
-    alert("Group created with ID: " + roomId);
-    openGroupPage(roomId);
+    // check if HTML came
+    if (text.startsWith("<!DOCTYPE")) {
+        alert("ERROR: Backend returned HTML, not roomId");
+        return;
+    }
 
+    alert("Group created with ID: " + text);
+
+    openGroupPage(text);
 }
 
 function joinRoom(){

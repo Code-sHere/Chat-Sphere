@@ -6,121 +6,86 @@
     <title>Group Chat</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#B51A2B",
+                        secondary: "#FFA586",
+                        dark: "#384358",
+                        deep: "#161E2F",
+                        panel: "#242F49"
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" th:href="@{/css/style3.css}">
 </head>
 
-<body class="h-screen flex">
+<body class="h-screen flex bg-gradient-to-b from-primary to-deep p-6 text-white">
 
-    <!-- LEFT PANEL -->
+    <div class="h-full flex gap-6 w-full">
+        <div class="w-72 flex-shrink-0 flex-col rounded-2xl user-panel overflow-hidden">
 
-    <div class="w-72 border-r flex flex-col">
+            <div class="p-4 font-bold text-lg glass text-white">
+                Group Chat
+            </div>
 
-        <div class="p-4 font-bold border-b">
-            Group Chat
-        </div>
-
-        <!-- CREATE ROOM -->
-
-        <div class="p-4 border-b">
-
-            <button
-                onclick="createRoom()"
-                class="w-full bg-blue-600 text-white px-4 py-2 rounded mb-3">
-
-                Create Room
-
-            </button>
-
-            <!-- JOIN ROOM -->
-
-            <div class="flex gap-2">
-
-                <input
-                    id="roomIdInput"
-                    placeholder="Enter Room ID"
-                    class="flex-1 border px-3 py-2 rounded"
-                >
-
-                <button
-                    onclick="joinRoom()"
-                    class="bg-green-600 text-white px-4 py-2 rounded">
-
-                    Join
-
+            <!-- CREATE ROOM -->
+            <div class="p-4 border-t border-white/10 space-y-3">
+                <button onclick="createRoom()" class="w-full bg-primary text-white px-4 py-2 rounded-full shadow-lg">
+                    Create Room
                 </button>
 
+                <div class="flex gap-2">
+                    <input id="roomIdInput" placeholder="Enter Room ID"
+                        class="flex-1 px-3 py-2 rounded-xl outline-none bg-panel text-white">
+                    <button onclick="joinRoom()" class="bg-secondary text-black px-4 py-2 rounded-full">
+                        Join
+                    </button>
+                </div>
+            </div>
+
+            <!-- ROOM INFO -->
+            <div class="p-4 text-sm flex-1 border-t border-white/10">
+                <div id="roomIdDisplay">
+                    No room connected
+                </div>
+            </div>
+        </div>
+
+
+        <!-- RIGHT PANEL -->
+        <div class="flex flex-col flex-1 rounded-2xl glass">
+
+            <!-- HEADER -->
+            <div class="p-4 font-semibold glass flex justify-between items-center text-white">
+                <div id="chatHeader" class="font-semibold">
+                    Group Chat
+                </div>
+
+                <button id="leaveBtn" class="bg-primary px-4 py-2 rounded-full">
+                    Leave Room
+                </button>
+            </div>
+
+            <!-- MESSAGES -->
+            <div id="messageContainer" class="flex-1 overflow-y-auto p-4 space-y-2">
+            </div>
+
+            <!-- INPUT -->
+            <div class="flex gap-2 p-3 border-t border-white/10 glass">
+                <input id="messageInput" type="text" placeholder="Type message"
+                    class="flex-1 px-4 py-2 rounded-full outline-none bg-panel text-white">
+
+                <button onclick="sendMessage()" class="bg-primary text-white px-4 py-2 shadow-lg rounded-full">
+                    Send
+                </button>
             </div>
 
         </div>
-
-        <!-- ROOM INFO -->
-
-        <div class="p-4 text-sm text-gray-600">
-
-            <div id="roomIdDisplay">
-                No room connected
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- CHAT AREA -->
-
-    <div class="flex flex-col flex-1">
-
-        <!-- HEADER -->
-
-        <div class="p-4 border-b flex justify-between items-center">
-
-            <div id="chatHeader" class="font-semibold">
-
-                Group Chat
-
-            </div>
-
-            <button
-                id="leaveBtn"
-                onclick="leaveRoom()"
-                class="bg-red-500 text-white px-4 py-2 rounded-full">
-
-                Leave Room
-
-            </button>
-
-        </div>
-
-
-        <!-- MESSAGES -->
-
-        <div
-            id="messageContainer"
-            class="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-100">
-
-        </div>
-
-
-        <!-- INPUT -->
-
-        <div class="flex gap-2 p-3 border-t">
-
-            <input
-                id="messageInput"
-                type="text"
-                placeholder="Type message"
-                class="flex-1 border px-4 py-2 rounded-full"
-            >
-
-            <button
-                onclick="sendMessage()"
-                class="bg-blue-600 text-white px-4 py-2 rounded-full">
-
-                Send
-
-            </button>
-
-        </div>
-
     </div>
 
     <script th:src="@{/js/GroupchatOperations.js}"></script>
