@@ -42,6 +42,7 @@ public class Passwordconfig {
                         "/register",
                         "/login",
                         "/css/**",
+                        "/group",
                         "/private/**",
                         "/group/**",
                         "/users",

@@ -85,3 +85,7 @@ button:hover{
     color: #9aa4c3;
     font-size: 12px;
 }
+
+#messageContainer {
+    scroll-behavior: smooth;
+}
