@@ -27,7 +27,7 @@ public class GroupChatServer {
         groups.computeIfAbsent(groupId, k -> new CopyOnWriteArraySet<>()).add(session);
 
         try{
-            broadcast(groupId, username + " Joined Group");
+            broadcast(groupId,"System:" + username + " Joined the Group");
         }
         catch(IOException e){
             e.printStackTrace();
@@ -43,7 +43,7 @@ public class GroupChatServer {
         String username = users.get(sender);
 
         if(username != null){
-            broadcast(groupId, username + ": " + message);
+            broadcast(groupId,"Chat:" + username + ": " + message);
         }
    }
 
@@ -66,7 +66,7 @@ public class GroupChatServer {
        }
 
        if(username != null){
-        broadcast(groupId, username + " left the grpoup");
+        broadcast(groupId,"System:" + username + " left the grpoup");
        }
 
     }

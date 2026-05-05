@@ -95,61 +95,38 @@ public class PrivateMessageServer {
         }
 
         @OnMessage
-        public void onMessage(Session session,
-                        String message) {
+        public void onMessage(Session session, String message) throws IOException {
 
-                String sender = (String) session
-                                .getUserProperties()
-                                .get("username");
+                String sender = (String) session.getUserProperties().get("username");
 
+                if (message.startsWith("Typing:")) {
+
+                        String receiver = message.replace("Typing:", "").trim();
+
+                        Session typingSession = usersDirectory.get(receiver);
+
+                        if (typingSession != null && typingSession.isOpen()) {
+                                typingSession.getBasicRemote().sendText("Typing:" + sender);
+                        }
+
+                        return;
+                }
+
+                
                 String[] parts = message.trim().split(":", 2);
 
                 if (parts.length != 2) {
-                        sendMessage(session,
-                                        "Invalid format. Use receiver:message");
+                        sendMessage(session, "Invalid format");
                         return;
                 }
 
                 String receiver = parts[0].trim();
                 String text = parts[1].trim();
 
-                if (sender.equals(receiver)) {
-                        sendMessage(session,
-                                        "You can't send message to yourself");
-                        return;
-                }
-
-                System.out.println("Sender: " + sender);
-                System.out.println("Receiver: " + receiver);
-                System.out.println("Message: " + text);
-
                 Session receiverSession = usersDirectory.get(receiver);
 
-                Long senderId = getUserIdByUsername(sender);
-
-                Long chatId = getOrCreateChat(
-                                senderId,
-                                receiver);
-
-                messageService.sendMessage(
-                                chatId,
-                                senderId,
-                                text);
-
-                if (receiverSession != null
-                                && receiverSession.isOpen()) {
-
-                        sendMessage(
-                                        receiverSession,
-                                        sender + ":" + text);
-
-                } else {
-
-                        sendMessage(
-                                        session,
-                                        "User "
-                                                        + receiver
-                                                        + " is not online");
+                if (receiverSession != null && receiverSession.isOpen()) {
+                        sendMessage(receiverSession, sender + ":" + text);
                 }
         }
 
