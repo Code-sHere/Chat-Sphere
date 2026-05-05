@@ -10,6 +10,7 @@ import java.util.Map;
 import com.chatapp.demo.Models.UserEntity;
 import com.chatapp.demo.Service.Userservice;
 import com.chatapp.demo.Service.MessageService;
+import com.chatapp.demo.Repository.Userrepository;
 import com.chatapp.demo.config.Passwordconfig;
 import org.springframework.security.core.Authentication;
 
@@ -35,6 +36,9 @@ public class UserController {
 
     @Autowired
     private Userservice userService;
+
+    @Autowired
+    private Userrepository userrepository;
 
     UserController(MessageService messageService) {
         this.messageService = messageService;
@@ -66,13 +70,14 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/current-user")
-    public Map<String, String> getCurrentUser(Authentication authentication) {
+    public Map<String, String> getCurrentUser(Authentication auth) {
 
-        Map<String, String> response = new HashMap<>();
-
-        response.put("username", authentication.getName());
-
-        return response;
+        String email = auth.getName();
+        UserEntity user = userrepository.findByEmail(email);
+        return Map.of(
+                "username", user.getName(),
+                "email", user.getEmail()
+        );
     }
     
 }

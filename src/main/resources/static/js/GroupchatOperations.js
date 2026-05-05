@@ -28,12 +28,45 @@ async function connectWebSocket(groupId) {
 
         const message = event.data;
 
-        showReceivedMessage(message);
+        if(message.startsWith("System:")){
+            const text = message.replace("System:","");
+            showSystemMessage(text);
+        }else if(message.startsWith("Chat:")){
+            const parts = message.replace("Chat:", "").split(": ");
+            const sender = parts[0];
+            const text = parts.slice(1).join(": ");
+
+            if(sender === username){
+                ShowSentMessages(text);
+            }else{
+                showReceivedMessage(text);
+            }
+            
+        }
     }
 
     socket.onclose = function () {
         console.log("Disconnected from group chat");
     }
+
+}
+
+
+function showSystemMessage(text){
+
+    const container = document.getElementById("messageContainer");
+
+    const div = document.createElement("div");
+    
+    div.className = "flex justify-center my-2";
+
+    div.innerHTML = `
+    <div class="text-white px-4 py-2 bg-transparent text-xs border border-none opacity-75">
+        ${text}
+    </div>`
+
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
 
 }
 
@@ -53,8 +86,6 @@ function sendMessage(groupId, message) {
     }
 
     socket.send(text);
-
-    ShowSentMessages(text);
     input.value = "";
 }
 

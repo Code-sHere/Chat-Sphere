@@ -2,6 +2,7 @@ let socket;
 let currentReceiver = "";
 let onlineUsers = [];
 let username = "";
+let userMap = {};
 let chatHistory = {};
 
 
@@ -28,7 +29,7 @@ async function getUsername() {
         const res = await fetch("/current-user");
 
         data = await res.json();
-        username = data.username;
+        username = data.email;
 
         console.log("Logged in:", username);
 
@@ -116,6 +117,15 @@ function connectWebsocket() {
             }
         }
 
+        if(message.startsWith("Typing:")){
+
+            const sender = message.replace("Typing:","").trim();
+
+            if(sender === currentReceiver){
+                showTypingIndicator(sender);
+            }
+            return;
+        }
 
     };
 
@@ -128,42 +138,31 @@ function connectWebsocket() {
 }
 
 
-function selectUser(user) {
+function selectUser(email) {
 
-    currentReceiver = user;
+    currentReceiver = email;
 
-    document
-        .getElementById("chatHeader")
-        .innerText =
-        "Chat with " + user;
+    document.getElementById("chatHeader").innerText =
+        "Chat with " + email;
 
-    const container =
-        document.getElementById("messageContainer");
-
+    const container = document.getElementById("messageContainer");
     container.innerHTML = "";
 
-    if (!chatHistory[user]) {
-        chatHistory[user] = [];
+    if (!chatHistory[email]) {
+        chatHistory[email] = [];
     }
 
-    if (chatHistory[user].length === 0) {
-        loadMessages(user);
+    if (chatHistory[email].length === 0) {
+        loadMessages(email);
     }
 
-    chatHistory[user].forEach(msg => {
-
+    chatHistory[email].forEach(msg => {
         if (msg.type === "sent") {
-
             showSentMessage(msg.text);
-
         } else {
-
             showReceivedMessage(msg.text);
-
         }
-
     });
-
 }
 
 function sendMessage() {
@@ -177,14 +176,6 @@ function sendMessage() {
     const text =
         input.value.trim();
 
-    if (!text) {
-
-        alert(
-            "Type message"
-        );
-
-        return;
-    }
 
     if (!currentReceiver) {
 
@@ -241,6 +232,10 @@ function sendMessage() {
 
         }
     );
+
+    messageInput.addEventListener("input", ()=>{
+        sendTyping();
+    })
 
     showSentMessage(text);
 
@@ -331,43 +326,30 @@ async function loadAllUsers() {
 
 function renderUserList(users) {
 
-    const userList =
-        document.getElementById("userList");
-
+    const userList = document.getElementById("userList");
     userList.innerHTML = "";
 
     users.forEach(user => {
 
-        if (user.email.trim() === username.trim())
-            return;
+        if(user.email === username) return;
 
-        const isOnline =
-            onlineUsers.includes(user.email);
+        const isOnline = onlineUsers.includes(user.email);
 
-        const dot =
-            isOnline
-                ? "bg-green-500"
-                : "bg-red-400";
+        const dot = isOnline ? "bg-green-500" : "bg-red-400";
 
-        const preview =
-            lastMessagePreview(
-                chatHistory[user.email]
-            );
+        const preview = lastMessagePreview(chatHistory[user.email]);
 
-        const div =
-            document.createElement("div");
+        const div = document.createElement("div");
 
-        div.className =
-            "user-card flex items-center gap-3 p-3 cursor-pointer";
+        div.className = "user-card flex items-center gap-3 p-3 cursor-pointer";
 
-        div.onclick =
-            () => selectUser(user.email);
+        div.onclick = () => selectUser(user.email);
 
         div.innerHTML = `
-
             <div class="flex flex-col flex-1 rounded-lg p-2 bg-transparent">
 
-                <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="status-dot ${dot} w-3 h-3 rounded-full"></span>
                     <span class="font-semibold">
                         ${user.username}
                     </span>
@@ -528,4 +510,32 @@ function lastMessagePreview(chat) {
 
 function Groups() {
     window.location.href = "/group";
+}
+
+
+function sendTyping(){
+    if(socket && socket.readyState === WebSocket.OPEN && currentReceiver){
+        socket.send("Typing:" + currentReceiver);
+    }
+}
+
+function showTypingIndicator(user){
+
+    const header = document.getElementById("chatHeader");
+
+    let dot = 0;
+
+    clearInterval(window.typingAnim);
+
+    window.typingAnim = setInterval(() => {
+        dots = (dots + 1) % 4;
+        header.innerText = user + " is typing" + ".".repeat(dots);
+    }, 400);
+
+    clearTimeout(window.typingTimer);
+
+    window.typingTimer = setTimeout(() => {
+        clearInterval(window.typingAnim);
+        header.innerText = "Chat with " + user;
+    }, 2000);
 }
