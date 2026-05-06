@@ -75,6 +75,16 @@ function connectWebsocket() {
 
         console.log("Received:", message);
 
+        if (message.startsWith("Typing:")) {
+
+            const sender = message.replace("Typing:", "").trim();
+
+            if (sender === currentReceiver) {
+                showTypingIndicator(sender);
+            }
+            return;
+        }
+
         if (
             message.startsWith(
                 "Online users:"
@@ -113,18 +123,7 @@ function connectWebsocket() {
                     text: text
                 });
 
-                showNotification(sender, text);
             }
-        }
-
-        if(message.startsWith("Typing:")){
-
-            const sender = message.replace("Typing:","").trim();
-
-            if(sender === currentReceiver){
-                showTypingIndicator(sender);
-            }
-            return;
         }
 
     };
@@ -138,7 +137,7 @@ function connectWebsocket() {
 }
 
 
-function selectUser(email) {
+function selectUser(email, chatId) {
 
     currentReceiver = email;
 
@@ -163,6 +162,8 @@ function selectUser(email) {
             showReceivedMessage(msg.text);
         }
     });
+
+    seenMessage(chatId);
 }
 
 function sendMessage() {
@@ -217,62 +218,64 @@ function sendMessage() {
     });
 
 
-    const messageInput =
-        document.getElementById("messageInput");
-
-    messageInput.addEventListener(
-        "keypress",
-        function (e) {
-
-            if (e.key === "Enter") {
-
-                sendMessage();
-
-            }
-
-        }
-    );
-
-    messageInput.addEventListener("input", ()=>{
-        sendTyping();
-    })
-
-    showSentMessage(text);
+    showSentMessage(text, );
 
     input.value = "";
 
 }
 
-function showSentMessage(text) {
+messageInput.addEventListener("input", () => {
+    sendTyping();
+});
 
-    const container =
-        document
-            .getElementById(
-                "messageContainer"
-            );
+messageInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
 
-    const div =
-        document
-            .createElement(
-                "div"
-            );
 
-    div.className =
-        "flex justify-end";
+async function seenMessage(chatId) {
+    const response = await fetch(`/message/seen?chatId=${chatId}`, {
+        method: "PUT"
+    });
 
-    div.innerHTML =
-        `
+    const container = document.getElementById("messageContainer");
+
+    container.innerHTML = "";
+
+    chatHistory[currentReceiver] =[];
+
+    loadMessages(currentReceiver);
+
+}
+
+function showSentMessage(text, seen = false) {
+
+   const container = document.getElementById("messageContainer");
+
+   const status = document.querySelector(".message-status");
+
+   if(status){
+       status.remove();
+   }
+
+   const div = document.createElement("div");
+
+   div.className = "flex felx-col items-end mb-2";
+
+   div.innerHTML = `
         <div class="sent-msg text-white px-4 py-2 rounded-2xl max-w-xs">
             ${text}
         </div>
+
+        <span class="message-status text-xs text-gray-400 mt-1">${seen ? "Seen" : "Sent"}</span>
         `;
 
-    container.appendChild(
-        div
-    );
+        container.appendChild(div);
 
-    container.scrollTop =
-        container.scrollHeight;
+        container.scrollTop = container.scrollHeight;
+    
 
 }
 
@@ -331,7 +334,7 @@ function renderUserList(users) {
 
     users.forEach(user => {
 
-        if(user.email === username) return;
+        if (user.email === username) return;
 
         const isOnline = onlineUsers.includes(user.email);
 
@@ -421,55 +424,29 @@ async function loadMessages(user) {
 
     messages.forEach(msg => {
 
-        if (msg.senderEmail === username) {
+        if (msg.senderId === username) {
 
             chatHistory[user].push({
                 type: "sent",
-                text: msg.text
+                text: msg.messageText,
+                seen: msg.seen
             });
 
-            showSentMessage(msg.text);
+            showSentMessage(msg.messageText, msg.seen);
 
         } else {
 
             chatHistory[user].push({
                 type: "received",
-                text: msg.text
+                text: msg.messageText
             });
 
-            showReceivedMessage(msg.text);
+            showReceivedMessage(msg.messageText);
 
         }
 
     });
 
-}
-
-
-let unreadCount = {};
-
-function showNotification(sender, text) {
-    if (Notification.permission === "granted") {
-
-        const notification = new Notification(`New message from ${sender}`, {
-            body: text
-        });
-
-        setTimeout(() => {
-            notification.close();
-        }, 3000);
-
-    } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(permission => {
-            if (permission === "granted") {
-
-                const notification = new Notification(`New message from ${sender}`, { body: text });
-                setTimeout(() => notification.close(), 3000);
-            }
-        });
-    }
-
-    unreadCount[sender] = (unreadCount[sender] || 0) + 1;
 }
 
 
@@ -513,29 +490,29 @@ function Groups() {
 }
 
 
-function sendTyping(){
-    if(socket && socket.readyState === WebSocket.OPEN && currentReceiver){
+function sendTyping() {
+    if (socket && socket.readyState === WebSocket.OPEN && currentReceiver) {
         socket.send("Typing:" + currentReceiver);
     }
 }
 
-function showTypingIndicator(user){
+function showTypingIndicator(user) {
 
     const header = document.getElementById("chatHeader");
 
-    let dot = 0;
+    let dots = 0;
 
     clearInterval(window.typingAnim);
 
     window.typingAnim = setInterval(() => {
         dots = (dots + 1) % 4;
         header.innerText = user + " is typing" + ".".repeat(dots);
-    }, 400);
+    }, 300);
 
     clearTimeout(window.typingTimer);
 
     window.typingTimer = setTimeout(() => {
         clearInterval(window.typingAnim);
         header.innerText = "Chat with " + user;
-    }, 2000);
+    }, 800);
 }
