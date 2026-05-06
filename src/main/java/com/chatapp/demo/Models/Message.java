@@ -27,6 +27,8 @@ public class Message {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    private boolean seen = false;
+
     public Message(){
     }
 
@@ -34,13 +36,17 @@ public class Message {
                    Long senderId,
                    String messageType,
                    String messageText,
-                   LocalDateTime createdAt) {
+                   LocalDateTime createdAt,
+                   boolean seen
+                ) {
 
         this.chatId = chatId;
         this.senderId = senderId;
         this.messageType = messageType;
         this.messageText = messageText;
         this.createdAt = createdAt;
+        this.seen = seen;
+
     }
 
     public Long getId(){
@@ -83,6 +89,12 @@ public class Message {
     public void setCreatedAt(LocalDateTime createdAt){
         this.createdAt = createdAt;
     }
-    
+
+    public boolean getSeen(){
+        return seen;
+    }
+    public void setSeen(boolean seen){
+        this.seen = seen;
+    }   
 
 }

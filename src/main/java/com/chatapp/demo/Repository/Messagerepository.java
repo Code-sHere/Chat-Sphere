@@ -7,12 +7,9 @@ import java.util.List;
 
 import com.chatapp.demo.Models.Message;
 
-
 @Repository
 public interface Messagerepository extends JpaRepository<Message, Long> {
 
-    List<Message>
-    findByChatId(
+    List<Message> findByChatId(
             Long chatId);
 }
-
