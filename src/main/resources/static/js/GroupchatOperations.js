@@ -1,6 +1,7 @@
 let socket;
 let username = "";
 let currentSGroupId = "";
+let typingTimeout;
 
 
 async function getUsername() {
@@ -27,22 +28,33 @@ async function connectWebSocket(groupId) {
     socket.onmessage = function (event) {
 
         const message = event.data;
+        if(message.startsWith("Typing:")){
+            const sender = message.replace("Typing:","").trim();
 
-        if(message.startsWith("System:")){
+            if(sender !== username){
+                showTypingIndicator(sender);
+            }
+            return;
+        }
+        else if(message.startsWith("System:")){
             const text = message.replace("System:","");
             showSystemMessage(text);
-        }else if(message.startsWith("Chat:")){
+        }
+        
+        else if(message.startsWith("Chat:")){
             const parts = message.replace("Chat:", "").split(": ");
             const sender = parts[0];
             const text = parts.slice(1).join(": ");
 
             if(sender === username){
-                ShowSentMessages(text);
+                ShowSentMessages("You: " + text);
             }else{
-                showReceivedMessage(text);
+                showReceivedMessage(sender + ": " + text);
             }
             
         }
+
+        
     }
 
     socket.onclose = function () {
@@ -107,7 +119,7 @@ function ShowSentMessages(text) {
     container.scrollTop = container.scrollHeight;
 }
 
-function showReceivedMessage(text) {
+function showReceivedMessage(sender, text) {
 
 
 
@@ -129,7 +141,7 @@ function showReceivedMessage(text) {
     div.innerHTML =
         `
         <div class="received-msg bg-gray-600 text-white px-4 py-2 rounded-2xl max-w-xs">
-            ${text}
+            ${sender}
         </div>
         `;
 
@@ -193,6 +205,16 @@ window.onload = async function(){
     const params = new URLSearchParams(window.location.search);
 
     const roomId = params.get("roomId");
+    
+    const input = document.getElementById("messageInput");
+
+    input.addEventListener("input", ()=>{
+        if(socket && socket.readyState === WebSocket.OPEN){
+
+            socket.send("Typing:");
+
+        }
+    });
 
     if(roomId){
 
@@ -200,4 +222,25 @@ window.onload = async function(){
 
         document.getElementById("roomIdDisplay").innerText = "Group ID: " + roomId;
     }
+}
+
+function showTypingIndicator(user) {
+
+    const header = document.getElementById("typingStatus");
+
+    let dots = 0;
+
+    clearInterval(window.typingAnim);
+
+    window.typingAnim = setInterval(() => {
+        dots = (dots + 1) % 4;
+        header.innerText = user + " is typing" + ".".repeat(dots);
+    }, 300);
+
+    clearTimeout(window.typingTimer);
+
+    window.typingTimer = setTimeout(() => {
+        clearInterval(window.typingAnim);
+        header.innerText = "Chat with " + user;
+    }, 1200);
 }

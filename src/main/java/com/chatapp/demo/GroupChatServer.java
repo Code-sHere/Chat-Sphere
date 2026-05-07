@@ -42,9 +42,25 @@ public class GroupChatServer {
     ) throws IOException{
         String username = users.get(sender);
 
-        if(username != null){
-            broadcast(groupId,"Chat:" + username + ": " + message);
+        if(username == null){
+            return;
         }
+
+        if(message.startsWith("Typing:")){
+            Set<Session> members = groups.get(groupId);
+
+            if(members !=null ){
+                for(Session client: members){
+                    if(client != sender && client.isOpen()){
+
+                        client.getAsyncRemote().sendText("Typing:" + username);
+                    }
+                }
+            }
+            return;
+        }
+
+        broadcast(groupId,"Chat:" + username + ": " + message);
    }
 
     @OnClose
@@ -66,7 +82,7 @@ public class GroupChatServer {
        }
 
        if(username != null){
-        broadcast(groupId,"System:" + username + " left the grpoup");
+        broadcast(groupId,"System:" + username + " left the Group");
        }
 
     }
