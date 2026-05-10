@@ -126,6 +126,35 @@ function connectWebsocket() {
             }
         }
 
+        try {
+
+            const data = JSON.parse(message);
+
+            if (data.type === "IMAGE") {
+
+                showImage(data.fileUrl);
+
+            } else if (data.type === "VIDEO") {
+
+                showVideo(data.fileUrl);
+
+            } else if (data.type === "AUDIO") {
+
+                showAudio(data.fileUrl);
+
+            } else if (data.type === "FILE") {
+
+                showFile(
+                    data.fileUrl,
+                    data.fileName
+                );
+            }
+
+        } catch (error) {
+
+            console.log("Normal text message");
+        }
+
     };
 
     socket.onclose = function () {
@@ -163,7 +192,9 @@ function selectUser(email, chatId) {
         }
     });
 
-    seenMessage(chatId);
+    if (chatId !== undefined && chatId !== null) {
+        seenMessage(chatId);
+    }
 }
 
 function sendMessage() {
@@ -218,7 +249,7 @@ function sendMessage() {
     });
 
 
-    showSentMessage(text, );
+    showSentMessage(text,);
 
     input.value = "";
 
@@ -244,7 +275,7 @@ async function seenMessage(chatId) {
 
     container.innerHTML = "";
 
-    chatHistory[currentReceiver] =[];
+    chatHistory[currentReceiver] = [];
 
     loadMessages(currentReceiver);
 
@@ -252,19 +283,19 @@ async function seenMessage(chatId) {
 
 function showSentMessage(text, seen = false) {
 
-   const container = document.getElementById("messageContainer");
+    const container = document.getElementById("messageContainer");
 
-   const status = document.querySelector(".message-status");
+    const status = document.querySelector(".message-status");
 
-   if(status){
-       status.remove();
-   }
+    if (status) {
+        status.remove();
+    }
 
-   const div = document.createElement("div");
+    const div = document.createElement("div");
 
-   div.className = "flex felx-col items-end mb-2";
+    div.className = "flex felx-col items-end mb-2";
 
-   div.innerHTML = `
+    div.innerHTML = `
         <div class="sent-msg text-white px-4 py-2 rounded-2xl max-w-xs">
             ${text}
         </div>
@@ -272,10 +303,10 @@ function showSentMessage(text, seen = false) {
         <span class="message-status text-xs text-gray-400 mt-1">${seen ? "Seen" : "Sent"}</span>
         `;
 
-        container.appendChild(div);
+    container.appendChild(div);
 
-        container.scrollTop = container.scrollHeight;
-    
+    container.scrollTop = container.scrollHeight;
+
 
 }
 
@@ -346,7 +377,7 @@ function renderUserList(users) {
 
         div.className = "user-card flex items-center gap-3 p-3 cursor-pointer";
 
-        div.onclick = () => selectUser(user.email);
+        div.onclick = () => selectUser(user.email, user.chatId);
 
         div.innerHTML = `
             <div class="flex flex-col flex-1 rounded-lg p-2 bg-transparent">
@@ -515,4 +546,97 @@ function showTypingIndicator(user) {
         clearInterval(window.typingAnim);
         header.innerText = "Chat with " + user;
     }, 800);
+}
+
+function getFileType(file) {
+
+    if (file.type.startsWith("image/")) {
+        return "IMAGE";
+    }
+    if (file.type.startsWith("video/")) {
+        return "VIDEO";
+    }
+    if (file.type.startsWith("audio/")) {
+        return "AUDIO";
+    }
+    return "FILE";
+}
+
+async function uploadAttachment() {
+    const file = document.getElementById("fileInput").files[0];
+
+    if (!file) return;
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    const response = await fetch("/upload", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await response.json();
+
+    const attachment = {
+        type: getFileType(file),
+        fileName: data.fileName,
+        fileUrl: data.fileUrl,
+        fileType: data.fileType
+    };
+
+    socket.send(JSON.stringify(attachment));
+    console.log("Uploaded:", attachment);
+}
+
+function showImage(url) {
+    const container = document.getElementById("messageContainer");
+
+    const div = document.createElement("div");
+
+    div.innerHTML = `<img src="${encodeURI(url)}" class="w-64 rounded-lg object-cover">`;
+
+    container.appendChild(div);
+
+    container.scrollTop = container.scrollHeight;
+}
+
+function showVideo(url) {
+
+    const video = document.createElement("video");
+
+    video.src = url;
+
+    video.controls = true;
+
+    video.className = "w-64 rounded-lg object-cover";
+
+    document.getElementById("messageContainer").appendChild(video);
+}
+
+
+function showAudio(url) {
+    const audio = document.createElement("audio");
+
+    audio.src = url;
+
+    audio.controls = true;
+
+    audio.className = "w-64 h-20 rounded-lg object-cover";
+
+    document.getElementById("messageContainer").appendChild(audio);
+}
+
+function showFile(url, name) {
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.innerText = name;
+
+    link.target = "_blank";
+
+    link.className = "text-red-400 underline";
+
+    document.getElementById("messageContainer").appendChild(link);
 }

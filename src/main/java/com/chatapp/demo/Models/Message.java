@@ -3,6 +3,9 @@ package com.chatapp.demo.Models;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import java.util.List;
+import java.util.ArrayList;
+
 
 @Entity
 @Table( name = "messages")
@@ -28,6 +31,10 @@ public class Message {
     private LocalDateTime createdAt;
 
     private boolean seen = false;
+
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    private List<Attachment> attachments = new ArrayList<>();
 
     public Message(){
     }
@@ -95,6 +102,15 @@ public class Message {
     }
     public void setSeen(boolean seen){
         this.seen = seen;
+    }
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(
+            List<Attachment> attachments
+    ) {
+        this.attachments = attachments;
     }   
 
 }

@@ -57,8 +57,8 @@
 
             <!-- SEARCH -->
 
-            <input id="searchUser" placeholder="Search anyone..." class="m-3 px-3 py-2 rounded-xl outline-none bg-panel text-white"
-                onkeyup="searchUser()">
+            <input id="searchUser" placeholder="Search anyone..."
+                class="m-3 px-3 py-2 rounded-xl outline-none bg-panel text-white" onkeyup="searchUser()">
 
             <!-- USER LIST -->
 
@@ -70,7 +70,8 @@
 
             <div class="p-4 border-t flex gap-2">
 
-                <button class="rounded-full w-full cursor-pointer bg-primary text-white p-2 shadow-lg" onclick="Groups()">
+                <button class="rounded-full w-full cursor-pointer bg-primary text-white p-2 shadow-lg"
+                    onclick="Groups()">
 
                     Groups
 
@@ -104,11 +105,14 @@
 
                 <!-- ATTACH -->
 
-                <button class="bg-secondary text-black px-4 py-2 rounded-full">
+                <label for="fileInput"
+                    class="bg-secondary text-black px-4 py-2 rounded-full cursor-pointer flex items-center justify-center">
 
                     <i class="fa-solid fa-paperclip"></i>
 
-                </button>
+                </label>
+                
+                <input type="file" id="fileInput" class="hidden" onchange="uploadAttachment()">
 
                 <!-- MESSAGE INPUT -->
 
