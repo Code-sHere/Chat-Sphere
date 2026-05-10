@@ -112,6 +112,15 @@ public class PrivateMessageServer {
                         return;
                 }
 
+                if(message.startsWith("{")){
+                        for(Session client : usersDirectory.values()){
+                                if(client.isOpen()){
+                                        client.getBasicRemote().sendText(message);
+                                }
+                        }
+                        return;
+                }
+
                 
                 String[] parts = message.trim().split(":", 2);
 
