@@ -60,6 +60,15 @@ public class GroupChatServer {
             return;
         }
 
+        if(message.startsWith("{")){
+            for(Session client: groups.get(groupId)){
+                if(client.isOpen()){
+                    client.getBasicRemote().sendText(message);
+                }
+            }
+            return;
+        }
+
         broadcast(groupId,"Chat:" + username + ": " + message);
    }
 
