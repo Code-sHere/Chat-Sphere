@@ -293,7 +293,7 @@ function showSentMessage(text, seen = false) {
 
     const div = document.createElement("div");
 
-    div.className = "flex felx-col items-end mb-2";
+    div.className = "flex flex-col items-end mb-2";
 
     div.innerHTML = `
         <div class="sent-msg text-white px-4 py-2 rounded-2xl max-w-xs">
